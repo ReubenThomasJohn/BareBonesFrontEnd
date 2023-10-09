@@ -36,6 +36,7 @@ public class HomeController : Controller
         return RedirectToAction("Index");
     }
 
+    [HttpPost]
     public async Task<IActionResult> Delete(int id)
     {
         var endpoint = $"/students/{id}";
@@ -45,7 +46,19 @@ public class HomeController : Controller
         return RedirectToAction("Index");
     }
 
-    public async Task<IActionResult> UpdateStudent(int id, Student updatedStudent)
+    [HttpGet]
+    public async Task<IActionResult> Edit(int id)
+    {
+        var student = await _apiService.GetResourceDataAsync($"students/{id}");
+        if (student != null)
+        {
+            return View(student);
+        }
+        return View(null);
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> Edit(int id, Student updatedStudent)
     {
         var endpoint = $"/api/students/{id}";
         await _apiService.UpdateDataAsync(endpoint, updatedStudent);
