@@ -65,6 +65,7 @@ public class ApiService
     public async Task DeleteDataAsync(string endpoint)
     {
         var response = await _httpClient.DeleteAsync(endpoint);
+        System.Console.WriteLine(response);
 
         if (!response.IsSuccessStatusCode)
         {
@@ -78,6 +79,7 @@ public class ApiService
         var content = new StringContent(jsonData, Encoding.UTF8, "application/json");
 
         var response = await _httpClient.PutAsync(endpoint, content);
+        System.Console.WriteLine(response);
 
         if (!response.IsSuccessStatusCode)
         {

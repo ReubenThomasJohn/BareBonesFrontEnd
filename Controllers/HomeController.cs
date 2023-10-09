@@ -40,10 +40,10 @@ public class HomeController : Controller
         return RedirectToAction("Index");
     }
 
-    [HttpPost]
-    public async Task<IActionResult> Delete(Student student)
+    [HttpGet]
+    public async Task<IActionResult> Delete(int id)
     {
-        var endpoint = $"/students/{student.Id}";
+        var endpoint = $"/students/{id}";
         await _apiService.DeleteDataAsync(endpoint);
 
         // Handle the response as needed (e.g., redirect to a different page)
@@ -64,7 +64,8 @@ public class HomeController : Controller
     [HttpPost]
     public async Task<IActionResult> Edit(Student updatedStudent)
     {
-        var endpoint = $"/api/students/{updatedStudent.Id}";
+        var endpoint = $"/students/{updatedStudent.Id}";
+        System.Console.WriteLine(endpoint);
         await _apiService.UpdateDataAsync(endpoint, updatedStudent);
         return RedirectToAction("Index");
     }
