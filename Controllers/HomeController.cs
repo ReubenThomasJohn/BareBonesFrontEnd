@@ -1,6 +1,9 @@
 ﻿using System.Diagnostics;
+using BareBonesFrontEnd.Models.ViewModels;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using StudentFrontEnd.Models;
+using System.Net.Http.Headers;
 
 namespace StudentFrontEnd.Controllers;
 
@@ -27,19 +30,20 @@ public class HomeController : Controller
     }
 
     [HttpPost]
-    public async Task<IActionResult> Create(Student student)
+    public async Task<IActionResult> Create(CreateStudentRequest student)
     {
+        var json = JsonConvert.SerializeObject(student);
         // Make a POST request to create a new student
-        await _apiService.PostDataAsync("/api/students", student);
-
+        var content = new StringContent(json, System.Text.Encoding.UTF8, "application/json");
+        await _apiService.PostDataAsync("/students", content);
         // Handle the response as needed (e.g., redirect to a different page)
         return RedirectToAction("Index");
     }
 
     [HttpPost]
-    public async Task<IActionResult> Delete(int id)
+    public async Task<IActionResult> Delete(Student student)
     {
-        var endpoint = $"/students/{id}";
+        var endpoint = $"/students/{student.Id}";
         await _apiService.DeleteDataAsync(endpoint);
 
         // Handle the response as needed (e.g., redirect to a different page)
@@ -49,7 +53,7 @@ public class HomeController : Controller
     [HttpGet]
     public async Task<IActionResult> Edit(int id)
     {
-        var student = await _apiService.GetResourceDataAsync($"students/{id}");
+        var student = await _apiService.GetOneResourceDataAsync($"students/{id}");
         if (student != null)
         {
             return View(student);
@@ -58,9 +62,9 @@ public class HomeController : Controller
     }
 
     [HttpPost]
-    public async Task<IActionResult> Edit(int id, Student updatedStudent)
+    public async Task<IActionResult> Edit(Student updatedStudent)
     {
-        var endpoint = $"/api/students/{id}";
+        var endpoint = $"/api/students/{updatedStudent.Id}";
         await _apiService.UpdateDataAsync(endpoint, updatedStudent);
         return RedirectToAction("Index");
     }

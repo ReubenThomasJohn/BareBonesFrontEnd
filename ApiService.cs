@@ -1,6 +1,7 @@
 using System.Net.Http.Headers;
 using System.Text;
 using System.Text.Json;
+using BareBonesFrontEnd.Models.ViewModels;
 using Newtonsoft.Json;
 using StudentFrontEnd.Models;
 
@@ -34,13 +35,31 @@ public class ApiService
         }
     }
 
-    public async Task PostDataAsync(string endpoint, Student student)
+    public async Task<Student> GetOneResourceDataAsync(string endpoint)
     {
-        var jsonData = JsonConvert.SerializeObject(student);
+        var response = await _httpClient.GetAsync(endpoint);
 
-        var content = new StringContent(jsonData, Encoding.UTF8, "application/json");
+        if (response.IsSuccessStatusCode)
+        {
+            string? stringResponse = await response.Content.ReadAsStringAsync();
+            return JsonConvert.DeserializeObject<Student>(stringResponse);
+        }
+        else
+        {
+            return new Student();
+        }
+    }
 
-        var response = await _httpClient.PostAsync(endpoint, content);
+    public async Task PostDataAsync(string endpoint, StringContent student)
+    {
+        // var jsonData = JsonConvert.SerializeObject(student);
+
+        // var content = new StringContent(jsonData, Encoding.UTF8, "application/json");
+
+        // JsonContent content = JsonContent.Create(student);
+        var response = await _httpClient.PostAsync(endpoint, student);
+        System.Console.WriteLine(response);
+        // var response = await _httpClient.PostAsync(endpoint, content);
     }
 
     public async Task DeleteDataAsync(string endpoint)
@@ -49,7 +68,6 @@ public class ApiService
 
         if (!response.IsSuccessStatusCode)
         {
-            // Handle error cases here, e.g., throw an exception or log an error
         }
     }
 
@@ -63,7 +81,6 @@ public class ApiService
 
         if (!response.IsSuccessStatusCode)
         {
-            // Handle error cases here, e.g., throw an exception or log an error
         }
     }
 }
