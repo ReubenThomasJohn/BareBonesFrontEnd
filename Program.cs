@@ -1,12 +1,14 @@
+using BareBonesFrontEnd.Data;
 using StudentFrontEnd;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
-builder.Services.AddHttpClient<ApiService>();
+builder.Services.AddRepositories(builder.Configuration);
 
 var app = builder.Build();
+app.Services.InitializeDb();
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())

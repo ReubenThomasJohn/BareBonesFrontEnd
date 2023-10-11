@@ -4,22 +4,23 @@ using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using StudentFrontEnd.Models;
 using System.Net.Http.Headers;
+using StudentApi.Repositories;
 
 namespace StudentFrontEnd.Controllers;
 
 public class HomeController : Controller
 {
-    private readonly ApiService _apiService;
+    private readonly IStudentsRepository _repository;
 
-    public HomeController(ApiService apiService)
+    public HomeController(IStudentsRepository repository)
     {
-        _apiService = apiService;
+        _repository = repository;
     }
 
     [HttpGet]
     public async Task<IActionResult> Index()
     {
-        var studentData = await _apiService.GetResourceDataAsync("students/");
+        var studentData = await _repository.GetAllAsync();
         return View(studentData);
     }
 
@@ -32,10 +33,7 @@ public class HomeController : Controller
     [HttpPost]
     public async Task<IActionResult> Create(CreateStudentRequest student)
     {
-        var json = JsonConvert.SerializeObject(student);
-        // Make a POST request to create a new student
-        var content = new StringContent(json, System.Text.Encoding.UTF8, "application/json");
-        await _apiService.PostDataAsync("/students", content);
+        await _repository.CreateAsync(student);
         // Handle the response as needed (e.g., redirect to a different page)
         return RedirectToAction("Index");
     }
@@ -43,8 +41,7 @@ public class HomeController : Controller
     [HttpGet]
     public async Task<IActionResult> Delete(int id)
     {
-        var endpoint = $"/students/{id}";
-        await _apiService.DeleteDataAsync(endpoint);
+        await _repository.DeleteAsync(id);
 
         // Handle the response as needed (e.g., redirect to a different page)
         return RedirectToAction("Index");
@@ -53,7 +50,7 @@ public class HomeController : Controller
     [HttpGet]
     public async Task<IActionResult> Edit(int id)
     {
-        var student = await _apiService.GetOneResourceDataAsync($"students/{id}");
+        var student = await _repository.GetAsync(id);
         if (student != null)
         {
             return View(student);
@@ -62,11 +59,9 @@ public class HomeController : Controller
     }
 
     [HttpPost]
-    public async Task<IActionResult> Edit(Student updatedStudent)
+    public async Task<IActionResult> Edit(UpdateStudentRequest updatedStudent)
     {
-        var endpoint = $"/students/{updatedStudent.Id}";
-        System.Console.WriteLine(endpoint);
-        await _apiService.UpdateDataAsync(endpoint, updatedStudent);
+        await _repository.UpdateAsync(updatedStudent);
         return RedirectToAction("Index");
     }
 
