@@ -1,4 +1,4 @@
-@model Models.Student
+@model BareBonesFrontEnd.Models.ViewModels.StudentWithAllStateNames
 @{
 }
 
@@ -12,35 +12,39 @@
     <form method="post">
         <div class="mb-3">
             <label class="form-label">Name</label>
-            <input type="text" class="form-control" id="name" asp-for="Name" required />
-            <span class="text-danger" asp-validation-for="Name"></span>
+            <input type="text" class="form-control" id="name" asp-for="students.Name" required />
+            <span class="text-danger" asp-validation-for="students.Name"></span>
         </div>
 
         <div class="mb-3">
             <label class="form-label">Rank</label>
-            <input type="text" class="form-control" id="rank" asp-for="Rank" required />
-            <span class="text-danger" asp-validation-for="Rank"></span>
+            <input type="text" class="form-control" id="rank" asp-for="students.Rank" required />
+            <span class="text-danger" asp-validation-for="students.Rank"></span>
         </div>
 
-        <div class="mb-3">
-            <label class="form-label">StateId</label>
-            <input type="text" class="form-control" id="stateid" asp-for="StateId" required />
-            <span class="text-danger" asp-validation-for="Rank"></span>
-        </div>
+        @* <div class="mb-3">
+        <label class="form-label">StateId</label>
+        <input type="text" class="form-control" id="stateid" asp-for="StateId" required />
+        <span class="text-danger" asp-validation-for="Rank"></span>
+        </div> *@
 
-        <!--
+
         <div class="mb-3">
             <label class="form-label">State</label>
             <select name="state" id="state">
-                <option value="Tamil Nadu">Tamil Nadu</option>
-                <option value="Karnatak">Karnataka</option>
-                <option value="Kerala">Kerala</option>
-                <option value="Telangana">Telangana</option>
+                @foreach (var state in Model.states)
+                {
+                    <option value=@state.Id>@state.StateName</option>
+                    @* <option value=@state.Id>@state.StateName</option>
+                <option value=@state.Id>@state.StateName</option>
+                <option value=@state.Id>@state.StateName</option> *@
+                }
+
             </select>
-        @* <input type="text" class="form-control" id="displayName" asp-for="Rank" required />
+            @* <input type="text" class="form-control" id="displayName" asp-for="Rank" required />
             <span class="text-danger" asp-validation-for="Rank"></span> *@
         </div>
-        -->
+
 
         <div class="mb-3">
             <button type="submit" class="btn btn-dark">Submit</button>

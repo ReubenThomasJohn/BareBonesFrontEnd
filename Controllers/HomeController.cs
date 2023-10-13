@@ -1,11 +1,7 @@
 ﻿using System.Diagnostics;
-using Models.ViewModels;
 using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json;
 using Models;
-using System.Net.Http.Headers;
 using StudentApi.Repositories;
-using System.Collections.Immutable;
 
 namespace StudentFrontEnd.Controllers;
 

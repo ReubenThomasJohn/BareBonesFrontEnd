@@ -1,4 +1,4 @@
-using Models.ViewModels;
+using BareBonesFrontEnd.Models.ViewModels;
 using Models;
 
 namespace StudentApi.Repositories
@@ -9,10 +9,10 @@ namespace StudentApi.Repositories
 
         Task<Student?> DeleteAsync(int id);
 
-        Task<Student> GetAsync(int id);
+        Task<Student?> GetAsync(int id);
 
-        Task<List<Student>> GetAllAsync();
+        Task<List<StudentWithStateName?>> GetAllAsync();
 
-        Task<Student?> UpdateAsync(Student updatedStudent);
+        Task<StudentWithAllStateNames?> UpdateAsync(Student updatedStudent);
     }
 }

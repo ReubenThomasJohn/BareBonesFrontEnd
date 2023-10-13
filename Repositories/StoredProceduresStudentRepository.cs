@@ -1,5 +1,5 @@
 using BareBonesFrontEnd.Data;
-using Models.ViewModels;
+using BareBonesFrontEnd.Models.ViewModels;
 using Microsoft.EntityFrameworkCore;
 using StudentApi.Repositories;
 using Models;
@@ -54,7 +54,7 @@ namespace BareBonesFrontEnd.Repositories
             return Task.FromResult(foundStudent[0]);
         }
 
-        public Task<List<Student>> GetAllAsync()
+        public Task<List<StudentWithStateName>> GetAllAsync()
         {
             string getAllStudentsString = "EXEC GetAllStudentsWithStateId ";
 
@@ -62,23 +62,51 @@ namespace BareBonesFrontEnd.Repositories
                 .FromSqlRaw(getAllStudentsString)
                 .ToList();
 
-            return Task.FromResult(foundStudents);
+            string getAllStatesString = $"EXECUTE dbo.SelectAllStates";
+            var states = dbContext.States.FromSqlRaw(getAllStatesString).ToList();
+            var foundStudentsWithStateNames = new List<StudentWithStateName>();
+            if (states != null && foundStudents != null)
+            {
+                foreach (var student in foundStudents)
+                {
+                    var studentWithStateName = new StudentWithStateName
+                    {
+                        Id = student.Id,
+                        Name = student.Name,
+                        Rank = student.Rank,
+                        StateId = student.StateId,
+                        StateName = states
+                                        .Where(state => state.Id == student.StateId)
+                                        .Select(state => state.StateName)
+                                        .FirstOrDefault()   // take this from here
+                    };
+                    foundStudentsWithStateNames.Add(studentWithStateName);
+                }
+            }
+            return Task.FromResult(foundStudentsWithStateNames);
         }
 
-        public async Task<Student> UpdateAsync(Student updatedStudent)
+        public async Task<StudentWithAllStateNames> UpdateAsync(Student updatedStudent)
         {
+            var studentWithAllStates = new StudentWithAllStateNames();
             string findStudentString = $"EXECUTE dbo.GetOneStudentDataWithStateId '{updatedStudent.Id}'";
             var foundStudent = dbContext.Students.FromSqlRaw(findStudentString).ToList()[0];
             if (foundStudent != null)
             {
                 string updateStudentString = $"EXECUTE dbo.UpdateStudentStateId '{updatedStudent.Id}', '{updatedStudent.Name}', {updatedStudent.Rank}, {updatedStudent.StateId}";
                 dbContext.Database.ExecuteSqlRaw(updateStudentString);
+
+                string getAllStatesString = $"EXECUTE dbo.SelectAllStates";
+                var states = dbContext.States.FromSqlRaw(getAllStatesString).ToList();
+
+                studentWithAllStates.students = updatedStudent;
+                studentWithAllStates.states = states;
             }
             else
             {
 
             }
-            return foundStudent;
+            return studentWithAllStates;
         }
 
     }
