@@ -1,4 +1,4 @@
-﻿@model List<BareBonesFrontEnd.Models.ViewModels.StudentWithStateName>
+﻿@model List<Student>
 @{
 }
 
@@ -17,6 +17,7 @@
                     <th>Id</th>
                     <th>Name</th>
                     <th>Rank</th>
+                    <th>StateId</th>
                     <th> </th>
                     <th> </th>
                 </tr>
@@ -28,6 +29,7 @@
                         <td>@student.Id</td>
                         <td>@student.Name</td>
                         <td>@student.Rank</td>
+                        <td>@student.StateId</td>
                         <td>
                             <a asp-area="" asp-controller="Home" asp-action="Edit" asp-route-id="@student.Id">Edit</a>
                         </td>

@@ -1,8 +1,8 @@
 ﻿using System.Diagnostics;
-using StudentFrontEnd.Models.ViewModels;
+using Models.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
-using StudentFrontEnd.Models;
+using Models;
 using System.Net.Http.Headers;
 using StudentApi.Repositories;
 using System.Collections.Immutable;
@@ -22,21 +22,21 @@ public class HomeController : Controller
     public async Task<IActionResult> Index()
     {
         var studentsData = await _repository.GetAllAsync();
-        var studentsDataWithStateName = new List<StudentWithStateName>();
+        // var studentsDataWithStateName = new List<StudentWithStateName>();
 
-        foreach (var studentData in studentsData)
-        {
-            var studentDataWithStateName = new StudentWithStateName
-            {
-                Id = studentData.Id,
-                Name = studentData.Name,
-                Rank = studentData.Rank,
-                StateName = studentData.StateName
-            };
-            studentsDataWithStateName.Add(studentDataWithStateName);
-        }
+        // foreach (var studentData in studentsData)
+        // {
+        //     var studentDataWithStateName = new StudentWithStateName
+        //     {
+        //         Id = studentData.Id,
+        //         Name = studentData.Name,
+        //         Rank = studentData.Rank,
+        //         StateName = studentData.StateName
+        //     };
+        //     studentsDataWithStateName.Add(studentDataWithStateName);
+        // }
 
-        return View(studentsDataWithStateName);
+        return View(studentsData);
     }
 
     [HttpGet]
@@ -46,7 +46,7 @@ public class HomeController : Controller
     }
 
     [HttpPost]
-    public async Task<IActionResult> Create(CreateStudentRequest student)
+    public async Task<IActionResult> Create(Student student)
     {
         await _repository.CreateAsync(student);
         // Handle the response as needed (e.g., redirect to a different page)
@@ -74,7 +74,7 @@ public class HomeController : Controller
     }
 
     [HttpPost]
-    public async Task<IActionResult> Edit(UpdateStudentRequest updatedStudent)
+    public async Task<IActionResult> Edit(Student updatedStudent)
     {
         await _repository.UpdateAsync(updatedStudent);
         return RedirectToAction("Index");

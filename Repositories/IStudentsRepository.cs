@@ -1,5 +1,5 @@
-using StudentFrontEnd.Models.ViewModels;
-using StudentFrontEnd.Models;
+using Models.ViewModels;
+using Models;
 
 namespace StudentApi.Repositories
 {

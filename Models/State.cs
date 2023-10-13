@@ -1,6 +1,4 @@
-using StudentFrontEnd.Models;
-
-namespace BareBonesFrontEnd.Models;
+namespace Models;
 
 public class State
 {

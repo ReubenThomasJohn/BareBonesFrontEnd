@@ -1,4 +1,4 @@
-@model BareBonesFrontEnd.Models.ViewModels.CreateStudentRequest
+@model Models.Student
 @{
 }
 
@@ -18,10 +18,17 @@
 
         <div class="mb-3">
             <label class="form-label">Rank</label>
-            <input type="text" class="form-control" id="displayName" asp-for="Rank" required />
+            <input type="text" class="form-control" id="rank" asp-for="Rank" required />
             <span class="text-danger" asp-validation-for="Rank"></span>
         </div>
 
+        <div class="mb-3">
+            <label class="form-label">StateId</label>
+            <input type="text" class="form-control" id="stateid" asp-for="StateId" required />
+            <span class="text-danger" asp-validation-for="Rank"></span>
+        </div>
+
+        <!--
         <div class="mb-3">
             <label class="form-label">State</label>
             <select name="state" id="state">
@@ -30,9 +37,10 @@
                 <option value="Kerala">Kerala</option>
                 <option value="Telangana">Telangana</option>
             </select>
-            @* <input type="text" class="form-control" id="displayName" asp-for="Rank" required />
+        @* <input type="text" class="form-control" id="displayName" asp-for="Rank" required />
             <span class="text-danger" asp-validation-for="Rank"></span> *@
         </div>
+        -->
 
         <div class="mb-3">
             <button type="submit" class="btn btn-dark">Submit</button>

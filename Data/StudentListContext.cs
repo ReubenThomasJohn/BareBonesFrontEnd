@@ -1,8 +1,5 @@
-using BareBonesFrontEnd.Models;
+using Models;
 using Microsoft.EntityFrameworkCore;
-using StudentFrontEnd.Models;
-using StudentFrontEnd.Models.ViewModels;
-using Microsoft.EntityFrameworkCore.Query;
 
 namespace BareBonesFrontEnd.Data;
 

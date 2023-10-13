@@ -1,4 +1,4 @@
-namespace StudentFrontEnd.Models.ViewModels;
+namespace Models.ViewModels;
 
 public class StudentWithStateName
 {

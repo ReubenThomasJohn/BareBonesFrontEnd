@@ -1,8 +1,8 @@
 using System.ComponentModel.DataAnnotations;
-using BareBonesFrontEnd.Models;
+using Models;
 
 
-namespace StudentFrontEnd.Models;
+namespace Models;
 
 public class Student
 {
