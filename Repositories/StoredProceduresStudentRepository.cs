@@ -1,5 +1,5 @@
 using BareBonesFrontEnd.Data;
-using BareBonesFrontEnd.Models.ViewModels;
+using StudentFrontEnd.Models.ViewModels;
 using Microsoft.EntityFrameworkCore;
 using StudentApi.Repositories;
 using StudentFrontEnd.Models;
@@ -14,9 +14,9 @@ namespace BareBonesFrontEnd.Repositories
         {
             this.dbContext = dbContext;
         }
-        public async Task<CreateStudentRequest> CreateAsync(CreateStudentRequest student)
+        public async Task<Student> CreateAsync(Student student)
         {
-            string sql = $"EXEC CreateOneStudent '{student.Name}', {student.Rank}, '{student.StateName}'";
+            string sql = $"EXECUTE dbo.CreateOneStudent '{student.Name}', {student.Rank}, '{student.StateId}'";
             dbContext.Database.ExecuteSqlRaw(sql);
             return student;
         }
@@ -24,7 +24,7 @@ namespace BareBonesFrontEnd.Repositories
         public async Task<Student> DeleteAsync(int id)
         {
             string findStudentString = $"EXEC GetOneStudentDataWithStateName '{id}'";
-            var foundStudent = dbContext.Students.FromSqlRaw(findStudentString);
+            var foundStudent = dbContext.Students.FromSqlRaw(findStudentString).FirstOrDefault();
             if (foundStudent != null)
             {
                 string sql = $"EXEC DeleteStudentById '{id}'";
@@ -34,13 +34,15 @@ namespace BareBonesFrontEnd.Repositories
             {
 
             }
-            return foundStudent.ToList()[0];
+            return foundStudent;
         }
 
         public Task<Student>? GetAsync(int id)
         {
             string findStudentString = $"EXEC GetOneStudentDataWithStateName '{id}'";
-            var foundStudent = dbContext.Students.FromSqlRaw(findStudentString);
+            var foundStudent = dbContext.Students
+                                        .FromSqlRaw(findStudentString)
+                                        .FirstOrDefault();
             if (foundStudent != null)
             {
 
@@ -49,31 +51,34 @@ namespace BareBonesFrontEnd.Repositories
             {
 
             }
-            return Task.FromResult(foundStudent.ToList()[0]);
+            return Task.FromResult(foundStudent);
         }
 
-        public Task<IEnumerable<Student>> GetAllAsync()
+        public Task<List<Student>> GetAllAsync()
         {
-            string getAllStudentsString = $"EXEC GetStudentDataWithStateName";
-            var foundStudents = dbContext.Students.FromSqlRaw(getAllStudentsString);
-            IEnumerable<Student> students = foundStudents;
-            return Task.FromResult(students);
+            string getAllStudentsString = "EXEC GetStudentDataWithStateName";
+
+            var foundStudents = dbContext.Students
+                .FromSqlRaw(getAllStudentsString)
+                .ToList();
+
+            return Task.FromResult(foundStudents);
         }
 
-        public Task<Student> UpdateAsync(UpdateStudentRequest updatedStudent)
+        public async Task<Student> UpdateAsync(Student updatedStudent)
         {
-            string findStudentString = $"EXEC GetOneStudentDataWithStateName '{updatedStudent.Id}'";
-            var foundStudent = dbContext.Students.FromSqlRaw(findStudentString);
+            string findStudentString = $"EXECUTE dbo.GetOneStudentDataWithStateName '{updatedStudent.Id}'";
+            var foundStudent = await dbContext.Students.FromSqlRaw(findStudentString).FirstOrDefaultAsync();
             if (foundStudent != null)
             {
-                string updateStudentString = $"EXEC UpdateStudent '{updatedStudent.Name}', {updatedStudent.Rank}, '{updatedStudent.StateName}'";
+                string updateStudentString = $"EXECUTE dbo.UpdateStudent '{updatedStudent.Name}', {updatedStudent.Rank}, '{updatedStudent.Id}'";
                 dbContext.Database.ExecuteSqlRaw(updateStudentString);
             }
             else
             {
 
             }
-            return Task.FromResult(foundStudent.ToList()[0]);
+            return foundStudent;
         }
 
     }

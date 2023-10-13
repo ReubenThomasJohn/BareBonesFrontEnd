@@ -1,4 +1,4 @@
-namespace BareBonesFrontEnd.Models.ViewModels;
+namespace StudentFrontEnd.Models.ViewModels;
 
 public class CreateStudentRequest
 {

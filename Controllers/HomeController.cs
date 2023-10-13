@@ -1,10 +1,11 @@
 ﻿using System.Diagnostics;
-using BareBonesFrontEnd.Models.ViewModels;
+using StudentFrontEnd.Models.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using StudentFrontEnd.Models;
 using System.Net.Http.Headers;
 using StudentApi.Repositories;
+using System.Collections.Immutable;
 
 namespace StudentFrontEnd.Controllers;
 
@@ -20,8 +21,22 @@ public class HomeController : Controller
     [HttpGet]
     public async Task<IActionResult> Index()
     {
-        var studentData = await _repository.GetAllAsync();
-        return View(studentData);
+        var studentsData = await _repository.GetAllAsync();
+        var studentsDataWithStateName = new List<StudentWithStateName>();
+
+        foreach (var studentData in studentsData)
+        {
+            var studentDataWithStateName = new StudentWithStateName
+            {
+                Id = studentData.Id,
+                Name = studentData.Name,
+                Rank = studentData.Rank,
+                StateName = studentData.StateName
+            };
+            studentsDataWithStateName.Add(studentDataWithStateName);
+        }
+
+        return View(studentsDataWithStateName);
     }
 
     [HttpGet]

@@ -1,6 +1,8 @@
 using BareBonesFrontEnd.Models;
 using Microsoft.EntityFrameworkCore;
 using StudentFrontEnd.Models;
+using StudentFrontEnd.Models.ViewModels;
+using Microsoft.EntityFrameworkCore.Query;
 
 namespace BareBonesFrontEnd.Data;
 
@@ -21,6 +23,8 @@ public class StudentListContext : DbContext
         .WithOne(e => e.State)
         .HasForeignKey(e => e.StateId)
         .IsRequired();
+
+        // modelBuilder.Entity<StudentWithStateName>().HasNoKey();
 
         modelBuilder.Entity<State>().HasData(
         new State

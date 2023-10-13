@@ -64,10 +64,20 @@ namespace StudentFrontEnd.Data.Migrations
                     { 2, "Prakash", 2, 2 }
                 });
 
-            migrationBuilder.CreateIndex(
-                name: "IX_Students_StateId",
-                table: "Students",
-                column: "StateId");
+            // migrationBuilder.CreateIndex(
+            //     name: "IX_Students_StateId",
+            //     table: "Students",
+            //     column: "StateId");
+
+            // var sp = @"CREATE PROCEDURE [dbo].[GetStudents]
+            //         @FirstName varchar(50)
+            //     AS
+            //     BEGIN
+            //         SET NOCOUNT ON;
+            //         select * from Students where FirstName like @FirstName +'%'
+            //     END";
+
+            // migrationBuilder.Sql(sp);
         }
 
         /// <inheritdoc />
