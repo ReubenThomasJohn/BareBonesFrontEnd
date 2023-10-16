@@ -91,22 +91,45 @@ public class HomeController : Controller
         return RedirectToAction("Index");
     }
 
+    // [HttpGet]
+    // public async Task<IActionResult> Edit(int id)
+    // {
+    //     var student = await _repository.GetAsync(id);
+
+    //     if (student != null)
+    //     {
+    //         return View(student);
+    //     }
+    //     return View(null);
+    // }
+
     [HttpGet]
     public async Task<IActionResult> Edit(int id)
     {
         var student = await _repository.GetAsync(id);
-        
-        if (student != null)
+        var states = _repository.GetStates();
+        var StudentWithAllStateNames = new UpdateStudentViewModel
         {
-            return View(student);
-        }
-        return View(null);
+            Id = id,
+            Name = student.Name,
+            Rank = student.Rank,
+            States = states,
+            SelectedStateId = student.StateId
+        };
+        return View(StudentWithAllStateNames);
     }
 
     [HttpPost]
-    public async Task<IActionResult> Edit(Student updatedStudent)
+    public async Task<IActionResult> Edit(UpdateStudentViewModel updatedStudent)
     {
-        await _repository.UpdateAsync(updatedStudent);
+        var student = new Student
+        {
+            Id = updatedStudent.Id,
+            Name = updatedStudent.Name,
+            Rank = updatedStudent.Rank,
+            StateId = updatedStudent.SelectedStateId
+        };
+        await _repository.UpdateAsync(student);
         return RedirectToAction("Index");
     }
 

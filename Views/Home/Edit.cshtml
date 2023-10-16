@@ -1,4 +1,4 @@
-@model Models.Student
+@model BareBonesFrontEnd.Models.ViewModels.UpdateStudentViewModel
 @{
 }
 
@@ -28,16 +28,18 @@
                 <input type="text" id="displayName" class="form-control" asp-for="Rank" />
             </div>
 
-            @* <div class="mb-3">
-        <label class="form-label">State</label>
-        <select class="form-select" asp-for="SelectedStateId" name="SelectedStateId" id="SelectedStateId">
-        @foreach (var state in Model.States)
-        {
-        <option value="@state.Id">@state.StateName</option>
-        }
+            <div class="mb-3">
+                <label class="form-label">State</label>
+                <select class="form-select" asp-for="SelectedStateId" name="SelectedStateId" id="SelectedStateId">
+                    @foreach (var state in Model.States)
+                    {
+                        <option value="@state.Id">
+                            <text selected="@(state.Id == Model.SelectedStateId)">@state.StateName</text>
+                        </option>
+                    }
 
-        </select>
-        </div> *@
+                </select>
+            </div>
 
 
             <div class="mb-3">
