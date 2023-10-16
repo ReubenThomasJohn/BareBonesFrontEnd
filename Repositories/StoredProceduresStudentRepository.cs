@@ -86,28 +86,41 @@ namespace BareBonesFrontEnd.Repositories
             return Task.FromResult(foundStudentsWithStateNames);
         }
 
-        public async Task<StudentWithAllStateNames> UpdateAsync(Student updatedStudent)
+        public async Task<Student> UpdateAsync(Student updatedStudent)
         {
-            var studentWithAllStates = new StudentWithAllStateNames();
             string findStudentString = $"EXECUTE dbo.GetOneStudentDataWithStateId '{updatedStudent.Id}'";
             var foundStudent = dbContext.Students.FromSqlRaw(findStudentString).ToList()[0];
+
             if (foundStudent != null)
             {
                 string updateStudentString = $"EXECUTE dbo.UpdateStudentStateId '{updatedStudent.Id}', '{updatedStudent.Name}', {updatedStudent.Rank}, {updatedStudent.StateId}";
                 dbContext.Database.ExecuteSqlRaw(updateStudentString);
-
-                string getAllStatesString = $"EXECUTE dbo.SelectAllStates";
-                var states = dbContext.States.FromSqlRaw(getAllStatesString).ToList();
-
-                studentWithAllStates.students = updatedStudent;
-                studentWithAllStates.states = states;
             }
-            else
-            {
+            else { }
 
-            }
-            return studentWithAllStates;
+
+
+            return updatedStudent;
         }
 
+        public List<State> GetStates()
+        {
+            string getAllStatesString = $"EXECUTE dbo.SelectAllStates";
+            var states = dbContext.States.FromSqlRaw(getAllStatesString).ToList();
+
+            return states;
+        }
+
+        // public StudentWithAllStateNames GetStudentWithAllStateNames(Student student)
+        // {
+        //     var studentWithAllStates = new StudentWithAllStateNames();
+        //     string getAllStatesString = $"EXECUTE dbo.SelectAllStates";
+        //     var states = dbContext.States.FromSqlRaw(getAllStatesString).ToList();
+
+        //     studentWithAllStates.Student = student;
+        //     studentWithAllStates.States = states;
+
+        //     return studentWithAllStates;
+        // }
     }
 }

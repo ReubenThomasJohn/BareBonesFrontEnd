@@ -4,6 +4,6 @@ namespace BareBonesFrontEnd.Models.ViewModels;
 
 public class StudentWithAllStateNames
 {
-    public Student students { get; set; }
-    public List<State> states { get; set; }
+    public Student? Student { get; set; }
+    public List<State> States { get; set; }
 }

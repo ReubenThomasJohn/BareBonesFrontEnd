@@ -13,6 +13,7 @@ namespace StudentApi.Repositories
 
         Task<List<StudentWithStateName?>> GetAllAsync();
 
-        Task<StudentWithAllStateNames?> UpdateAsync(Student updatedStudent);
+        Task<Student?> UpdateAsync(Student updatedStudent);
+        List<State> GetStates();
     }
 }

@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics;
+using BareBonesFrontEnd.Models.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Models;
 using StudentApi.Repositories;
@@ -38,15 +39,47 @@ public class HomeController : Controller
     [HttpGet]
     public IActionResult Create()
     {
-        return View();
+        var states = _repository.GetStates();
+        var StudentWithAllStateNames = new CreateStudentViewModel
+        {
+            Name = "Enter Name Here",
+            States = states,
+            SelectedStateId = 1
+        };
+        return View(StudentWithAllStateNames);
     }
 
+    // [HttpPost]
+    // public async Task<IActionResult> Create(CreateStudentViewModel createdStudent)
+    // {
+    //     var student = new Student
+    //     {
+    //         Name = createdStudent.Name,
+    //         Rank = createdStudent.Rank,
+    //         StateId = createdStudent.SelectedStateId
+    //     };
+    //     await _repository.CreateAsync(student);
+    //     // Handle the response as needed (e.g., redirect to a different page)
+    //     return RedirectToAction("Index");
+    // }
+
     [HttpPost]
-    public async Task<IActionResult> Create(Student student)
+    public async Task<IActionResult> Create(CreateStudentViewModel createdStudent)
     {
-        await _repository.CreateAsync(student);
-        // Handle the response as needed (e.g., redirect to a different page)
-        return RedirectToAction("Index");
+        if (ModelState.IsValid)
+        {
+            var student = new Student
+            {
+                Name = createdStudent.Name,
+                Rank = createdStudent.Rank,
+                StateId = createdStudent.SelectedStateId
+            };
+            await _repository.CreateAsync(student);
+            // Handle the response as needed (e.g., redirect to a different page)
+            return RedirectToAction("Index");
+        }
+        // If ModelState is not valid, return to the form with validation errors
+        return View(createdStudent);
     }
 
     [HttpGet]
@@ -62,6 +95,7 @@ public class HomeController : Controller
     public async Task<IActionResult> Edit(int id)
     {
         var student = await _repository.GetAsync(id);
+        
         if (student != null)
         {
             return View(student);
